@@ -1,0 +1,65 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://Blobby2.tscn" type="PackedScene" id=1]
+[ext_resource path="res://spawner.gd" type="Script" id=2]
+[ext_resource path="res://BlobbyV3.tscn" type="PackedScene" id=3]
+
+[sub_resource type="CubeMesh" id=1]
+
+[sub_resource type="BoxShape" id=2]
+extents = Vector3( 1.07133, 1, 1.07651 )
+
+[sub_resource type="BoxShape" id=3]
+
+[node name="Main" type="Spatial"]
+
+[node name="Camera" type="Camera" parent="."]
+transform = Transform( -3.49271e-08, 0.601278, -0.79904, 2.62827e-08, 0.79904, 0.601278, 1, -1.77636e-15, -4.37114e-08, -26.6744, 13.288, -0.276871 )
+
+[node name="Ground" type="MeshInstance" parent="."]
+transform = Transform( 20, 0, 0, 0, 0.124, 0, 0, 0, 20, 0, 0, 0 )
+mesh = SubResource( 1 )
+material/0 = null
+
+[node name="StaticBody" type="StaticBody" parent="Ground"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Ground/StaticBody"]
+transform = Transform( 0.992044, 0, 0, 0, 0.992043, 0, 0, 0, 0.992044, 0, 0, 0 )
+shape = SubResource( 2 )
+
+[node name="Walls" type="Node" parent="Ground"]
+
+[node name="StaticBody" type="StaticBody" parent="Ground/Walls"]
+
+[node name="CollisionShape" type="CollisionShape" parent="Ground/Walls/StaticBody"]
+transform = Transform( 1, 0, 0, 0, 2.51025, 0, 0, 0, 21.5744, -20.5542, 0, 0 )
+shape = SubResource( 3 )
+
+[node name="CollisionShape2" type="CollisionShape" parent="Ground/Walls/StaticBody"]
+transform = Transform( 1, 0, 0, 0, 2.51025, 0, 0, 0, 21.5744, 21.2803, 0, 0 )
+shape = SubResource( 3 )
+
+[node name="CollisionShape3" type="CollisionShape" parent="Ground/Walls/StaticBody"]
+transform = Transform( -2.98023e-08, 0, -21.5744, 0, 2.51025, 0, 1, 0, -7.15256e-07, 1.43912, 0, 21.6631 )
+shape = SubResource( 3 )
+
+[node name="CollisionShape4" type="CollisionShape" parent="Ground/Walls/StaticBody"]
+transform = Transform( -2.98023e-08, 0, -21.5744, 0, 2.51025, 0, 1, 0, -7.15256e-07, 1.43912, 0, -20.5123 )
+shape = SubResource( 3 )
+
+[node name="Blobby" parent="." instance=ExtResource( 1 )]
+transform = Transform( 0.367446, 0, -0.930045, 0, 1, 0, 0.930045, 0, 0.367446, -0.362488, 1.88142, 0 )
+decay_rate = 0.999
+
+[node name="Blobby2" parent="." instance=ExtResource( 1 )]
+transform = Transform( 0.367446, 0, -0.930045, 0, 1, 0, 0.930045, 0, 0.367446, -6.11738, 1.88142, 0 )
+decay_rate = 1.0
+takes_input = true
+
+[node name="spawner" type="Spatial" parent="."]
+script = ExtResource( 2 )
+character = ExtResource( 3 )
+
+[node name="spawn_timer" type="Timer" parent="spawner"]
+wait_time = 5.0
+[connection signal="timeout" from="spawner/spawn_timer" to="spawner" method="_on_spawn_timer_timeout"]
